@@ -45,7 +45,7 @@ class MnistDataset(torch.utils.data.Dataset):
             data = np.load("../data/MNIST/processed_v2/validation.npz")
 
         self.x_data = data['images'].astype(np.float32)
-        self.y_data = data['labels'].astype(np.int32)
+        self.y_data = data['labels'].astype(np.int64)
         self.transform = transform
 
     def __len__(self):
