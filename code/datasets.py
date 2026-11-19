@@ -20,7 +20,7 @@ from torchvision import transforms
 #             ys = np.array(np.frombuffer(f.read(), np.uint8, offset=8))
 #             f.close()
 #         xs = np.reshape(xs, (-1, 28, 28, 1)).astype(np.float32)
-#         ys = ys.astype(np.int64)
+#         ys = ys.astype(np.int32)
 #         self.x_data = xs
 #         self.y_data = ys
 #         self.transform = transform
@@ -44,8 +44,8 @@ class MnistDataset(torch.utils.data.Dataset):
         else:
             data = np.load("../data/MNIST/processed_v2/validation.npz")
 
-        self.x_data = data['images']
-        self.y_data = data['labels'].astype(np.int64)
+        self.x_data = data['images'].astype(np.float32)
+        self.y_data = data['labels'].astype(np.int32)
         self.transform = transform
 
     def __len__(self):
@@ -53,7 +53,7 @@ class MnistDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, idx):
         x = Image.fromarray(self.x_data[idx])
-        y = torch.tensor(self.y_data[idx], dtype=torch.long)
+        y = torch.tensor(self.y_data[idx])
 
         if self.transform:
             x = self.transform(x)
