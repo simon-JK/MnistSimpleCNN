@@ -55,7 +55,7 @@ def run(p_seed=0, p_epochs=150, p_kernel_size=5, p_logdir="temp"):
     # data loader -----------------------------------------------------------------#
     train_dataset = MnistDataset(training=True, transform=transform)
     test_dataset = MnistDataset(training=False, transform=None)
-    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=120, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=100, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=100, shuffle=False)
 
     # model selection -------------------------------------------------------------#
