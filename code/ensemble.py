@@ -3,7 +3,7 @@ import numpy as np
 cnt = 1
 best = 10000
 curr = 10000
-n_trials=5
+n_trials=30
 
 for i in range(n_trials):
     for j in range(n_trials):

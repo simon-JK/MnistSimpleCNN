@@ -4,7 +4,7 @@ import argparse
 cnt = 1
 best = 10000
 curr = 10000
-n_trials = 5
+n_trials = 30
 
 p = argparse.ArgumentParser()
 p.add_argument("--kernel_size", default=5, type=int)
