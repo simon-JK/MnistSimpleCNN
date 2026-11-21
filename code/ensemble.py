@@ -5,6 +5,8 @@ best = 10000
 curr = 10000
 n_trials=30
 
+acc_list = []
+
 for i in range(n_trials):
     for j in range(n_trials):
         for k in range(n_trials):
@@ -24,4 +26,9 @@ for i in range(n_trials):
             if curr < best:
                 best = curr
             print("%4d %4d %4d"%(cnt, curr, best))
+            acc_list.append(curr)
             cnt += 1
+
+acc_list = np.array(acc_list)
+mean_acc = acc_list.mean()
+print(f"mean: {mean_acc}")

@@ -1,0 +1,81 @@
+import os.path
+
+import numpy as np
+
+
+def get_log_metrics(file:str):
+    val_acc = []
+    for line in open(file, 'r'):
+        line_values = line.split()
+        if int(line_values[0]) < 50:
+            continue
+        val_acc.append(line_values[4])
+
+    val_acc = np.array(val_acc).astype(np.float32)
+    # print(val_acc)
+    min_acc = val_acc.min()
+    avg_acc = val_acc.mean()
+    max_acc = val_acc.max()
+    # print(min_acc, avg_acc, max_acc)
+    return min_acc, avg_acc, max_acc
+
+
+import scipy.stats
+
+def mean_confidence_interval(data, confidence=0.95):
+    a = 1.0 * np.array(data)
+    n = len(a)
+    m, se = np.mean(a), scipy.stats.sem(a)
+    h = se * scipy.stats.t.ppf((1 + confidence) / 2., n-1)
+    return m.round(4), h.round(4)
+
+
+def eval_model_types(model_dir:str):
+    min_list = []
+    avg_list = []
+    max_list = []
+    for i in range(30):
+        file = os.path.join(model_dir, "log%03d.out"%i)
+        min_acc, avg_acc, max_acc = get_log_metrics(file)
+        min_list.append(min_acc)
+        avg_list.append(avg_acc)
+        max_list.append(max_acc)
+    min_mean, min_conf = mean_confidence_interval(min_list)
+    avg_mean, avg_conf = mean_confidence_interval(avg_list)
+    max_mean, max_conf = mean_confidence_interval(max_list)
+    best = np.array(max_list).max()
+
+    return min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best
+
+
+def eval_individual_models():
+    print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4:7s}'.format("model", "min", "avg", "max", "best"))
+    min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM3")
+    print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M3",
+                                                                  f"{min_mean:.4f} ± {min_conf:.4f}",
+                                                                  f"{avg_mean:.4f} ± {avg_conf:.4f}",
+                                                                  f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}",))
+    min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM5")
+    print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M5",
+                                                                  f"{min_mean:.4f} ± {min_conf:.4f}",
+                                                                  f"{avg_mean:.4f} ± {avg_conf:.4f}",
+                                                                  f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}", ))
+    min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM7")
+    print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M7",
+                                                                  f"{min_mean:.4f} ± {min_conf:.4f}",
+                                                                  f"{avg_mean:.4f} ± {avg_conf:.4f}",
+                                                                  f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}", ))
+
+
+def eval_homo_ensembles()
+
+
+
+
+
+
+def evalutate():
+   eval_individual_models()
+
+if __name__ == '__main__':
+    evalutate()

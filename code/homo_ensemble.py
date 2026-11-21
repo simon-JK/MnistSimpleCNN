@@ -4,12 +4,13 @@ import argparse
 cnt = 1
 best = 10000
 curr = 10000
-n_trials = 30
+n_trials = 20
 
 p = argparse.ArgumentParser()
 p.add_argument("--kernel_size", default=5, type=int)
 args = p.parse_args()
 KERNEL_SIZE = args.kernel_size
+acc_list = []
 
 for i in range(n_trials):
     for j in range(i+1,n_trials):
@@ -27,4 +28,9 @@ for i in range(n_trials):
             if curr < best:
                 best = curr
             print("%4d %4d %4d %4d %4d %4d"%(cnt, len(w1), len(w2), len(w3), curr, best))
+            acc_list.append(curr)
             cnt += 1
+
+acc_list = np.array(acc_list)
+mean_acc = acc_list.mean()
+print(f"mean: {mean_acc}")
