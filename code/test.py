@@ -48,7 +48,7 @@ def run(p_seed=0, p_kernel_size=5, p_logdir="temp"):
     wrong_images = []
     with torch.no_grad():
         for batch_idx, (data, target) in enumerate(test_loader):
-            data, target = data.to(device), target.to(device)
+            data, target = data.to(device), target.long().to(device)
             output = model1(data)
             test_loss += F.nll_loss(output, target, reduction='sum').item()
             pred = output.argmax(dim=1, keepdim=True)
