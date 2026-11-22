@@ -4,7 +4,7 @@ import numpy as np
 import argparse
 
 
-def get_homo_ensemble(kernel_size):
+def get_homo_ensembles(kernel_size:int):
     cnt = 1
     best = 10000
     curr = 10000
@@ -14,7 +14,7 @@ def get_homo_ensemble(kernel_size):
 
     KERNEL_SIZE = kernel_size
     acc_list = []
-    board
+    boards = []
 
     for _ in range(1000):
 
@@ -33,7 +33,8 @@ def get_homo_ensemble(kernel_size):
         if curr < best:
             best = curr
         print("%4d %4d %4d %4d %4d %4d"%(cnt, len(w1), len(w2), len(w3), curr, best))
-        acc_list.append(curr)
+        acc_list.append((10000-curr)*0.01)
+        boards.append(board)
         cnt += 1
 
-    return acc_list
+    return acc_list, boards, (10000-best)*0.01

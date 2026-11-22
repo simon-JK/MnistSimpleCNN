@@ -2,6 +2,9 @@ import os.path
 
 import numpy as np
 
+from random_ensemble import get_hetero_ensembles
+from random_homo_ensemble import get_homo_ensembles
+
 
 def get_log_metrics(file:str):
     val_acc = []
@@ -51,15 +54,18 @@ def eval_model_types(model_dir:str):
 def eval_individual_models():
     print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4:7s}'.format("model", "min", "avg", "max", "best"))
     min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM3")
+
     print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M3",
                                                                   f"{min_mean:.4f} ± {min_conf:.4f}",
                                                                   f"{avg_mean:.4f} ± {avg_conf:.4f}",
                                                                   f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}",))
+
     min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM5")
     print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M5",
                                                                   f"{min_mean:.4f} ± {min_conf:.4f}",
                                                                   f"{avg_mean:.4f} ± {avg_conf:.4f}",
                                                                   f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}", ))
+
     min_mean, min_conf, avg_mean, avg_conf, max_mean, max_conf, best = eval_model_types("../logs/modelM7")
     print('{0:5s}    {1:16s}    {2:16s}    {3:16s}    {4}'.format("M7",
                                                                   f"{min_mean:.4f} ± {min_conf:.4f}",
@@ -67,7 +73,35 @@ def eval_individual_models():
                                                                   f"{max_mean:.4f} ± {max_conf:.4f}", f"{best:.2f}", ))
 
 
-def eval_homo_ensembles()
+def eval_level1_ensembles():
+    print('{0:15s}    {1:20s}    {2:7s}'.format("configuration", "95% confidence range", "best"))
+
+    acc_list, boards_m3, best = get_homo_ensembles(kernel_size=3)
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:15s}    {1:20s}    {2:7s}'.format("M3 + M3 + M3", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
+
+    acc_list, boards_m5, best = get_homo_ensembles(kernel_size=5)
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:15s}    {1:20s}    {2:7s}'.format("M5 + M5 + M5", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
+
+    acc_list, boards_m7, best = get_homo_ensembles(kernel_size=7)
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:15s}    {1:20s}    {2:7s}'.format("M7 + M7 + M7", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
+
+    acc_list, best = get_hetero_ensembles()
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:15s}    {1:20s}    {2:7s}'.format("M7 + M7 + M7", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
+
+    return boards_m3, boards_m5, boards_m7
+
+
+def eval_level2_ensembles(boards_m3, boards_m5, boards_m7):
+
+
+
+def eval_ensembles():
+    boards_m3, boards_m5, boards_m7 = eval_level1_ensembles()
+    eval_level2_ensembles(boards_m3, boards_m5, boards_m7)
 
 
 
