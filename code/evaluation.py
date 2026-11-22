@@ -2,7 +2,7 @@ import os.path
 
 import numpy as np
 
-from random_ensemble import get_hetero_ensembles
+from random_ensemble import get_hetero_ensembles, get_level2_ensembles, get_level2_ensembles_best
 from random_homo_ensemble import get_homo_ensembles
 
 
@@ -90,13 +90,24 @@ def eval_level1_ensembles():
 
     acc_list, best = get_hetero_ensembles()
     mean, mean_conf = mean_confidence_interval(acc_list)
-    print('{0:15s}    {1:20s}    {2:7s}'.format("M7 + M7 + M7", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
+    print('{0:15s}    {1:20s}    {2:7s}'.format("M3 + M5 + M7", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
 
     return boards_m3, boards_m5, boards_m7
 
 
 def eval_level2_ensembles(boards_m3, boards_m5, boards_m7):
+    print('{0:30s}    {1:20s}    {2:7s}'.format("configuration", "95% confidence range", "best"))
+    acc_list, best = get_level2_ensembles(boards_m3, boards_m5, boards_m7)
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:30s}    {1:20s}    {2:7s}'.format("ensemble of ensembles (random)", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
 
+    boards_m3_best = sorted(boards_m3, key=lambda x: len(x))[0:10]
+    boards_m5_best = sorted(boards_m5, key=lambda x: len(x))[0:10]
+    boards_m7_best = sorted(boards_m7, key=lambda x: len(x))[0:10]
+
+    acc_list, best = get_level2_ensembles_best(boards_m3_best, boards_m5_best, boards_m7_best)
+    mean, mean_conf = mean_confidence_interval(acc_list)
+    print('{0:30s}    {1:20s}    {2:7s}'.format("ensemble of ensembles (best)", f"{mean:.4f} ± {mean_conf:.4f}", f"{best:.2f}"))
 
 
 def eval_ensembles():
@@ -104,12 +115,10 @@ def eval_ensembles():
     eval_level2_ensembles(boards_m3, boards_m5, boards_m7)
 
 
-
-
-
-
 def evalutate():
    eval_individual_models()
+   eval_ensembles()
+
 
 if __name__ == '__main__':
     evalutate()

@@ -32,9 +32,9 @@ def get_homo_ensembles(kernel_size:int):
         curr = np.sum(board)
         if curr < best:
             best = curr
-        print("%4d %4d %4d %4d %4d %4d"%(cnt, len(w1), len(w2), len(w3), curr, best))
+        #print("%4d %4d %4d %4d %4d %4d"%(cnt, len(w1), len(w2), len(w3), curr, best))
         acc_list.append((10000-curr)*0.01)
-        boards.append(board)
+        boards.append([i for i in range(len(board)) if board[i]!=0.0])
         cnt += 1
 
     return acc_list, boards, (10000-best)*0.01
